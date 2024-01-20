@@ -63,25 +63,41 @@ $('.saveBtn').on('click', function() {
   tasks[index] = userInput
 
   // Stringify and store into local object
-  tasks = JSON.stringify(tasks)
-  localStorage.setItem('tasks', tasks)
+  tasksString = JSON.stringify(tasks)
+  localStorage.setItem('tasks', tasksString)
+
+  // Remove changed data attribute
+  const button = $(this).removeAttr('data-changed')
 })
 
+$('.description').change(function() {
+  const button = $(this).next()
 
+  // Check if value has changed
+  const index = button.data('index')
+  userInput = $(this).val()
 
-// Add event listener
-// If clicked element is button, prevent default, get text of adjacent element and store in local storage
-// as a big object with all of the events
+  // Value hasn't changed, remove highlight
+  if (userInput === tasks[index]) {
+    button.removeAttr('data-changed')
+    return
+  }
 
-// Add logic for adding event to block when button is preessed
+  // Value has changed, add highlight
+  button.attr('data-changed', 'true')
+})
 
-// Save / load events in local storage
+// Greyed out button when not needed
+// change all icons to be greyed by default
+// add event listener that looks for change
+// Run a check to see if it matches existing data saved in field
+// if changed, add class
+// add a full page event listener that, on close, prompts user they have unsaved changes (with browser if possible)
 
+// add popup when they save
+// remove the pointer when the data cannot be saved
 
 // ADDITIONAL FUNCTIONALITY 
-// Grey out button if there is no data to be stored
 // Potentially create logic to colour on hover?
 // Improve styling?
-// Drag / drop to reorganise events?
 // Customise times?
-// View future days?
