@@ -44,7 +44,7 @@ for (let i = startTime; i < finishTime + 1; i++) {
         <span>${taskHour}</span>
       </div>
       <textarea class="description ${context} col-10"">${task}</textarea>
-      <button class="saveBtn col-1 d-flex" data-index="_${i}">
+      <button class="saveBtn col-1 d-flex" data-index="_${i}" data-bs-toggle="tooltip" data-bs-title="Saved ✔️" data-bs-trigger="manual">
         <i class="fa-solid fa-floppy-disk"></i>
       </button>
     </div>
@@ -53,13 +53,15 @@ for (let i = startTime; i < finishTime + 1; i++) {
 
 // Get relevant user input on button click
 $('.saveBtn').on('click', function() {
-  // Validate there is an input in the field
+  // Get input and index
   const textArea = $(this).prev()
   const userInput = textArea.val()
-  if (!userInput) return
+  const index = $(this).data('index')
+
+  // Return if no change was detected
+  if (userInput === tasks[index]) return
 
   // Set object and save into storage
-  const index = $(this).data('index')
   tasks[index] = userInput
 
   // Stringify and store into local object
@@ -68,9 +70,15 @@ $('.saveBtn').on('click', function() {
 
   // Remove changed data attribute
   const button = $(this).removeAttr('data-changed')
+
+  // Display saved popup
+  $(this).tooltip('show')
+    setTimeout(() => {
+      $(this).tooltip('hide'); 
+    }, 1500);
 })
 
-$('.description').change(function() {
+$('.description').on('input', function() {
   const button = $(this).next()
 
   // Check if value has changed
@@ -87,17 +95,7 @@ $('.description').change(function() {
   button.attr('data-changed', 'true')
 })
 
-// Greyed out button when not needed
-// change all icons to be greyed by default
-// add event listener that looks for change
-// Run a check to see if it matches existing data saved in field
-// if changed, add class
-// add a full page event listener that, on close, prompts user they have unsaved changes (with browser if possible)
-
-// add popup when they save
-// remove the pointer when the data cannot be saved
-
-// ADDITIONAL FUNCTIONALITY 
-// Potentially create logic to colour on hover?
-// Improve styling?
-// Customise times?
+// Initialise Bootstrap tooltips
+$( document ).ready(function() {
+  $('[data-bs-toggle="tooltip"]').tooltip()
+});
