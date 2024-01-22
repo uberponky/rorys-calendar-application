@@ -1,12 +1,12 @@
 // Extend dayjs with advanced format plugin to allow ordinal suffix usage
 dayjs.extend(window.dayjs_plugin_advancedFormat)
 
-// Set global variables
 const currentDate = dayjs()
 const startTime = 9
 const finishTime = 17
-let tasks   // Object with all tasks, stored in local storage
-let task    // Individual tasks as stored in object
+const rows = [] // Empty array to store divs before appending
+let tasks       // Object with all tasks, stored in local storage
+let task        // Individual tasks as stored in object
 
 // Get on-page elements
 const timesContainer = $('#times')
@@ -38,7 +38,7 @@ for (let i = startTime; i < finishTime + 1; i++) {
   }
   
   // Create HTML for each section
-  timesContainer.append(`
+  rows.push(`
     <div class="row flex-row flex-nowrap time-block">
       <div class="hour col-1 ">
         <span>${taskHour}</span>
@@ -50,6 +50,10 @@ for (let i = startTime; i < finishTime + 1; i++) {
     </div>
   `)
 }
+
+// Append array to times container to avoid repeated expensive DOM changes
+timesContainer.append(rows.join(""));
+
 
 // Get relevant user input on button click
 $('.saveBtn').on('click', function() {
